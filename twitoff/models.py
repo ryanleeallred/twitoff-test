@@ -12,6 +12,8 @@ class User(DB.Model):
     id = DB.Column(DB.BigInteger, primary_key=True)
     # Each user will just have a name for now
     username = DB.Column(DB.String, nullable=False)
+    # keeps track of id for the newest tweet said by user
+    newest_tweet_id = DB.Column(DB.BigInteger)
 
     # This function changes how class objects are represented as strings. 
     def __repr__(self):
@@ -22,8 +24,8 @@ class Tweet(DB.Model):
     """Keeps track of Tweets for each user"""
     id = DB.Column(DB.BigInteger, primary_key=True)
     text = DB.Column(DB.Unicode(300))  # allows for text and links
-    user_id = DB.Column(DB.BigInteger, DB.ForeignKey(
-        'user.id'), nullable=False)
+    vect = DB.Column(DB.PickleType, nullable=False)
+    user_id = DB.Column(DB.BigInteger, DB.ForeignKey('user.id'), nullable=False)
     #Eestablish a collection of tweet objects on the 'User'name model. 
     # A user can now be associated with multiple tweets.
     user = DB.relationship('User', backref=DB.backref('tweets', lazy=True))

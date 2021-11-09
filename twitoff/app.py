@@ -1,6 +1,7 @@
 from re import DEBUG
 from flask import Flask, render_template
 from .models import DB, User, Tweet
+from .twitter import update_all_users, add_or_update_user
 
 def create_app():
 
@@ -23,17 +24,12 @@ def create_app():
 
     app_title = "Twitoff DS32"
 
-    @app.route("/test")
-    def test():
-        return f"<p>Another {app_title} page</p>"
-
-    @app.route('/hola')
-    def hola():
-        return "hola, Twitoff"
-
-    @app.route('/salut')
-    def salut():
-        return "salut, Twitoff"
+    @app.route('/update')
+    def update():
+        '''updates all users'''
+        usernames = update_all_users()
+        for username in usernames:
+            add_or_update_user(username)
 
     @app.route('/reset')
     def reset():
